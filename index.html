@@ -18,14 +18,125 @@
     * {
       box-sizing: border-box;
     }
+:root {
+  --pink: #be5297;
+  --light-pink: #e184b4;
+  --purple: #150f33;
+  --cream: #fff1f7;
+  --white: #fff9fc;
 
-    body {
-      margin: 0;
-      font-family: 'Playfair Display', serif;
-      background: var(--pink);
-      color: var(--purple);
-    }
+  /* Original theme */
+  --theme-bg: #24133F;
+  --theme-card: #fff9fc;
+  --theme-text: #ffffff;
+  --theme-card-text: #150f33;
+  --theme-primary: #BE5297;
+  --theme-secondary: #E184B4;
+  --theme-soft: #3a2854;
+  --theme-on-primary: #ffffff;
+}
 
+/* ORIGINAL */
+[data-theme="original"] {
+  --theme-bg: #392756;
+  --theme-card: #fff9fc;
+  --theme-text: #150f33;
+  --theme-card-text: #150f33;
+  --theme-primary: #BE5297;
+  --theme-secondary: #E184B4;
+  --theme-soft: #3a2854;
+  --theme-on-primary: #ffffff;
+}
+
+/* SAGE GARDEN */
+[data-theme="sage"] {
+  --theme-bg: #e8efe5;
+  --theme-card: #f7faf4;
+  --theme-text: #263b2c;
+  --theme-card-text: #263b2c;
+  --theme-primary: #66866b;
+  --theme-secondary: #a6b99a;
+  --theme-soft: #dce8d8;
+  --theme-on-primary: #ffffff;
+}
+
+/* ROSE ROMANCE */
+[data-theme="rose"] {
+  --theme-bg: #f8e8ed;
+  --theme-card: #fff7f8;
+  --theme-text: #51263b;
+  --theme-card-text: #51263b;
+  --theme-primary: #a84970;
+  --theme-secondary: #d98ca9;
+  --theme-soft: #f1d5df;
+  --theme-on-primary: #ffffff;
+}
+
+/* MIDNIGHT */
+[data-theme="midnight"] {
+  --theme-bg: #101a30;
+  --theme-card: #1c2944;
+  --theme-text: #edf2ff;
+  --theme-card-text: #e7eaf3;
+  --theme-primary: #232f48;
+  --theme-secondary: #1f314b;
+  --theme-soft: #263654;
+  --theme-on-primary: #101a30;
+}
+
+/* GOLDEN HOUR */
+[data-theme="golden"] {
+  --theme-bg: #eee4d3;
+  --theme-card: #faf3e6;
+  --theme-text: #493522;
+  --theme-card-text: #493522;
+  --theme-primary: #a77b39;
+  --theme-secondary: #d3ae69;
+  --theme-soft: #e5d6bd;
+  --theme-on-primary: #ffffff;
+}
+
+/* SOFT NEUTRAL */
+[data-theme="neutral"] {
+  --theme-bg: #eae3da;
+  --theme-card: #faf6ef;
+  --theme-text: #443a32;
+  --theme-card-text: #443a32;
+  --theme-primary: #947c69;
+  --theme-secondary: #c5ad98;
+  --theme-soft: #ded3c7;
+  --theme-on-primary: #ffffff;
+}
+
+/* MONOCHROME */
+[data-theme="monochrome"] {
+  --theme-bg: #e5e5e5;
+  --theme-card: #f8f8f8;
+  --theme-text: #171717;
+  --theme-card-text: #171717;
+  --theme-primary: #444444;
+  --theme-secondary: #999999;
+  --theme-soft: #d2d2d2;
+  --theme-on-primary: #ffffff;
+}
+
+/* OCEAN */
+[data-theme="ocean"] {
+  --theme-bg: #dcefeb;
+  --theme-card: #f3fbf9;
+  --theme-text: #123b3b;
+  --theme-card-text: #123b3b;
+  --theme-primary: #287d7b;
+  --theme-secondary: #70bdb5;
+  --theme-soft: #c8e3de;
+  --theme-on-primary: #ffffff;
+}
+   body {
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    background: var(--theme-bg);
+    color: var(--theme-text);
+}
     header {
       text-align: center;
       padding: 30px 20px 20px;
@@ -78,11 +189,12 @@
     }
 
     .card {
-      background: var(--light-pink);
-      padding: 23px;
-      border-radius: 18px;
-      min-width: 0;
-    }
+    background: var(--theme-card);
+    color: var(--theme-card-text);
+    padding: 23px;
+    border-radius: 18px;
+    min-width: 0;
+}
 
     .card h2 {
       margin-top: 0;
@@ -99,18 +211,18 @@
       padding: 11px;
     }
 
-    input, select {
-      background: var(--white);
-      color: var(--purple);
-      min-width: 0;
-    }
+   input, select {
+  background: var(--theme-card);
+  color: var(--theme-text);
+  min-width: 0;
+}
 
     button {
-      background: var(--purple);
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-    }
+  background: var(--theme-primary);
+  color: var(--theme-text);
+  cursor: pointer;
+  font-weight: bold;
+}
 
     button:hover {
       opacity: .85;
@@ -131,15 +243,15 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: var(--cream);
+      background: var(--theme-card);
       padding: 12px;
       border-radius: 10px;
       margin-top: 10px;
     }
 
     .task input {
-      accent-color: var(--pink);
-    }
+  accent-color: var(--theme-primary);
+}
 
     .task-name {
       flex: 1;
@@ -158,10 +270,10 @@
     }
 
     .delete {
-      background: transparent;
-      color: var(--purple);
-      padding: 5px;
-    }
+  background: transparent;
+  color: var(--theme-text);
+  padding: 5px;
+}
 
     .progress-track {
       height: 13px;
@@ -367,6 +479,19 @@
 .page.active {
   display: block;
 }
+.page#habits.active {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+:root {
+    --theme-background: #24133F;
+    --theme-primary: #BE5297;
+    --theme-accent: #E184B4;
+    --theme-text: #FFFFFF;
+    --theme-card: #FFFFFF;
+}
+</style>
   </style>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="app-icon.png">
@@ -419,6 +544,7 @@
   <button onclick="showPage('habits')" class="nav-button" id="nav-habits">Habits</button>
   <button onclick="showPage('schedule')" class="nav-button" id="nav-schedule">Schedule</button>
   <button onclick="showPage('goals')" class="nav-button" id="nav-goals">Goals</button>
+  <button onclick="showPage('appearance')" class="nav-button" id="nav-appearance">Appearance</button>
 </nav>
 <div class="page active" id="home">
     <section class="welcome">
@@ -588,6 +714,15 @@
         <div id="goalList"></div>
       </section>
 </div>
+<div class="page" id="appearance">
+  <section class="card">
+    <h2>Appearance</h2>
+    <p>Make LOCKD IN feel like yours.</p>
+
+    <h3>Choose a Theme</h3>
+    <div id="themeOptions"></div>
+  </section>
+</div>
   </main>
 
   <footer>
@@ -608,6 +743,7 @@
     let schedules = getSaved("lockdSchedules", []);
     let goals = getSaved("lockdGoals", []);
     let focus = getSaved("lockdFocus", "");
+    let currentTheme = getSaved("lockdTheme", "original");
 
     function saveData() {
       localStorage.setItem("lockdTasks", JSON.stringify(tasks));
@@ -1166,6 +1302,46 @@ function renderCalendarEvents() {
     container.appendChild(card);
   });
 }
+const themeList = [
+  { id: "original", name: "Original", color: "#be5297" },
+  { id: "sage", name: "Sage Garden", color: "#66866b" },
+  { id: "rose", name: "Rose Romance", color: "#a84970" },
+  { id: "midnight", name: "Midnight", color: "#658bd8" },
+  { id: "golden", name: "Golden Hour", color: "#a77b39" },
+  { id: "neutral", name: "Soft Neutral", color: "#947c69" },
+  { id: "monochrome", name: "Monochrome", color: "#444444" },
+  { id: "ocean", name: "Ocean", color: "#287d7b" }
+];
+
+function applyTheme(themeName) {
+  const validTheme = themeList.some(theme => theme.id === themeName)
+    ? themeName
+    : "original";
+
+  currentTheme = validTheme;
+  document.body.setAttribute("data-theme", validTheme);
+  localStorage.setItem("lockdTheme", JSON.stringify(validTheme));
+  renderThemes();
+}
+
+function loadTheme() {
+  applyTheme(currentTheme);
+}
+
+function renderThemes() {
+  const container = document.getElementById("themeOptions");
+  if (!container) return;
+
+  container.innerHTML = themeList.map(theme => `
+    <button
+      type="button"
+      onclick="applyTheme('${theme.id}')"
+      style="background:${theme.color}; margin:6px;"
+    >
+      ${theme.name}
+    </button>
+  `).join("");
+}
 function showPage(pageName) {
   document.querySelectorAll(".page").forEach(page => {
     page.classList.toggle("active", page.id === pageName);
@@ -1174,7 +1350,12 @@ function showPage(pageName) {
   document.querySelectorAll(".nav-button").forEach(button => {
     button.classList.toggle("active", button.id === "nav-" + pageName);
   });
+
+  if (pageName === "appearance") {
+    renderThemes();
+  }
 }
+loadTheme();
 showPage("home");
     showDate();
     renderCalendar();
