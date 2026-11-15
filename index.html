@@ -1,0 +1,1194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOCKD IN</title>
+
+  <style>
+    :root {
+      --pink: #be5297;
+      --light-pink: #e184b4;
+      --purple: #150f33;
+      --cream: #fff1f7;
+      --white: #fff9fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      background: var(--pink);
+      color: var(--purple);
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px 20px;
+    }
+
+   header h1 {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 5px;
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+    .welcome h2,
+.card h2 {
+  font-family: 'Pinyon Script', cursive;
+  font-size: 38px;
+  font-weight: normal;
+}
+
+    .tagline {
+      letter-spacing: 3px;
+      margin: 0;
+    }
+
+    .date {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .welcome {
+      background: var(--cream);
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 22px;
+    }
+
+    .welcome h2 {
+      margin-top: 0;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--light-pink);
+      padding: 23px;
+      border-radius: 18px;
+      min-width: 0;
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    .wide {
+      grid-column: span 2;
+    }
+
+    input, select, button {
+      font: inherit;
+      border: none;
+      border-radius: 9px;
+      padding: 11px;
+    }
+
+    input, select {
+      background: var(--white);
+      color: var(--purple);
+      min-width: 0;
+    }
+
+    button {
+      background: var(--purple);
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: .85;
+    }
+
+    .entry {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .entry input {
+      flex: 1;
+      width: 100%;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--cream);
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .task input {
+      accent-color: var(--pink);
+    }
+
+    .task-name {
+      flex: 1;
+      overflow-wrap: anywhere;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      opacity: .55;
+    }
+
+    .priority {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .delete {
+      background: transparent;
+      color: var(--purple);
+      padding: 5px;
+    }
+
+    .progress-track {
+      height: 13px;
+      background: var(--cream);
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 15px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--purple);
+      transition: width .3s;
+    }
+
+    .schedule-item, .goal-item {
+      background: var(--cream);
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+      overflow-wrap: anywhere;
+    }
+
+    .schedule-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .quote {
+      font-style: italic;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      letter-spacing: 2px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 650px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .wide {
+        grid-column: span 1;
+      }
+
+      header h1 {
+        font-size: 29px;
+      }
+
+      .entry {
+        flex-wrap: wrap;
+      }
+    }
+
+/* MONTHLY CALENDAR */
+
+.calendar-card {
+  margin-top: 22px;
+}
+
+.calendar-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendar-navigation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendar-navigation button {
+  padding: 8px 12px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.calendar-day {
+  background: var(--cream);
+  border-radius: 10px;
+  min-height: 65px;
+  padding: 8px 4px;
+  text-align: center;
+  color: var(--purple);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.calendar-day:hover {
+  border-color: var(--pink);
+}
+
+.calendar-day.selected {
+  background: var(--purple);
+  color: white;
+}
+
+.calendar-day.today {
+  border-color: var(--purple);
+}
+
+.calendar-day.empty {
+  background: transparent;
+  cursor: default;
+}
+
+.calendar-day .event-dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: var(--pink);
+  border-radius: 50%;
+  margin: 5px auto 0;
+}
+
+.calendar-day.selected .event-dot {
+  background: white;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-weight: bold;
+  padding: 8px 0;
+  font-size: 12px;
+}
+
+.calendar-event {
+  background: var(--cream);
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.calendar-event small {
+  display: block;
+  margin-top: 4px;
+  opacity: .7;
+}
+
+@media (max-width: 500px) {
+  .calendar-day {
+    min-height: 48px;
+    padding: 6px 2px;
+    font-size: 13px;
+  }
+
+  .calendar-grid {
+    gap: 3px;
+  }
+}
+/* TOP NAVIGATION */
+
+.top-navigation {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 12px;
+  background: var(--light-pink);
+  border-radius: 14px;
+}
+
+.nav-button {
+  background: transparent;
+  color: var(--purple);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.nav-button:hover,
+.nav-button.active {
+  background: var(--purple);
+  color: white;
+}
+
+/* PAGE VISIBILITY */
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="app-icon.png">
+<link rel="apple-touch-icon" href="app-icon.png">
+<link rel="manifest" href="manifest.json">
+<style>
+#loading-screen {
+    position: fixed;
+    inset: 0;
+    background: #24133F;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#loading-screen img {
+    width: 75%;
+    max-width: 300px;
+    height: auto;
+    object-fit: contain;
+}
+</style>
+</head>
+
+<body>
+<div id="loading-screen">
+    <img src="logo.png" alt="LOCKD IN Logo">
+</div>
+  <header>
+    <h1>LOCKD IN</h1>
+    <p class="tagline">TIME IS PRICELESS.</p>
+    <p class="date" id="todayDate"></p>
+  </header>
+<div class="page" id="habits">
+  
+</div>
+  <main>
+    <nav class="top-navigation">
+  <button onclick="showPage('home')" class="nav-button active" id="nav-home">Home</button>
+  <button onclick="showPage('calendar')" class="nav-button" id="nav-calendar">Calendar</button>
+  <button onclick="showPage('habits')" class="nav-button" id="nav-habits">Habits</button>
+  <button onclick="showPage('schedule')" class="nav-button" id="nav-schedule">Schedule</button>
+  <button onclick="showPage('goals')" class="nav-button" id="nav-goals">Goals</button>
+</nav>
+<div class="page active" id="home">
+    <section class="welcome">
+      <h2>Welcome back.</h2>
+      <p>A beautiful life is built one decision at a time.</p>
+      <p>Make today count.</p>
+    </section>
+
+    <div class="dashboard">
+
+      <section class="card">
+        <h2>Today's Focus</h2>
+        <p>What matters most today?</p>
+
+        <div class="entry">
+          <input id="focusInput" placeholder="Your main priority...">
+          <button onclick="saveFocus()">Save</button>
+        </div>
+
+        <p id="savedFocus"></p>
+      </section>
+
+      <section class="card">
+        <h2>Daily Progress</h2>
+        <h1 id="progressNumber">0%</h1>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressBar"></div>
+        </div>
+        <p id="progressText">Let's get started!</p>
+      </section>
+
+
+
+      <section class="card wide">
+        <h2>My Tasks</h2>
+        <p>Small steps create big results.</p>
+
+        <div class="entry">
+          <input id="taskInput" placeholder="Add a task...">
+          <select id="taskPriority">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+          <button onclick="addTask()">Add</button>
+        </div>
+
+        <div id="taskList"></div>
+           </section>
+
+    </div>
+</div>
+
+<div class="page" id="habits">
+
+  <section class="welcome">
+    <h2>My Habits.</h2>
+    <p>Little routines. Big changes.</p>
+  </section>
+
+  <section class="card">
+    <h2>Today's Progress</h2>
+    <h1 id="habitProgress">0%</h1>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="habitProgressBar"></div>
+    </div>
+
+    <p id="habitProgressText">Let's build some consistency!</p>
+  </section>
+
+  <section class="card wide">
+    <h2>My Daily Habits</h2>
+    <p>Create routines that work for you.</p>
+
+    <div class="entry">
+      <input id="habitInput" placeholder="Add a new habit...">
+
+      <select id="habitTime">
+        <option value="Morning">Morning</option>
+        <option value="Afternoon">Afternoon</option>
+        <option value="Evening">Evening</option>
+      </select>
+
+      <button onclick="addHabit()">Add</button>
+    </div>
+
+    <div id="habitList"></div>
+  </section>
+
+  <section class="card">
+    <h2>Consistency</h2>
+    <h1 id="habitStreak">0 days</h1>
+    <p>Your current streak.</p>
+  </section>
+
+</div>
+
+<div class="page" id="schedule">
+  <section class="card">
+    <h2>Daily Schedule</h2>
+    <p>Give your time a purpose.</p>
+
+    <div class="entry">
+      <input id="scheduleStart" type="time">
+      <input id="scheduleEnd" type="time">
+    </div>
+
+    <div class="entry">
+      <input id="scheduleInput" placeholder="What's happening?">
+
+      <select id="scheduleCategory">
+        <option value="Personal">Personal</option>
+        <option value="School">School</option>
+        <option value="Study">Study</option>
+        <option value="Work">Work</option>
+        <option value="Health">Health</option>
+      </select>
+
+      <button onclick="addSchedule()">Add</button>
+    </div>
+
+    <div id="scheduleList"></div>
+  </section>
+
+</div>
+<div class="page" id="calendar">
+<section class="card wide calendar-card">
+
+       <div class="calendar-heading">
+      <h2>My Calendar</h2>
+      <div class="calendar-navigation">
+        <button onclick="changeMonth(-1)">‹</button>
+        <strong id="calendarMonth"></strong>
+        <button onclick="changeMonth(1)">›</button>
+      </div>
+    </div>
+  
+
+  <div class="calendar-grid" id="calendarGrid"></div>
+
+  <hr>
+
+  <h3 id="selectedDate"></h3>
+
+  <div class="entry">
+    <input id="eventTitle" placeholder="Event or deadline...">
+    <input id="eventDescription" placeholder="Description (optional)">
+  </div>
+
+  <button onclick="addCalendarEvent()">Add Event</button>
+
+  <div id="calendarEvents"></div>
+</section>
+</div>
+
+<div class="page" id="goals">
+      <section class="card">
+        <h2>My Goals</h2>
+        <p>Keep your bigger picture in sight.</p>
+
+        <div class="entry">
+          <input id="goalInput" placeholder="Add a goal...">
+          <button onclick="addGoal()">Add</button>
+        </div>
+
+        <div id="goalList"></div>
+      </section>
+</div>
+  </main>
+
+  <footer>
+    LOCKD IN • MAKE YOUR TIME COUNT.
+  </footer>
+
+  <script>
+    const getSaved = (key, fallback) => {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : fallback;
+      } catch {
+        return fallback;
+      }
+    };
+
+    let tasks = getSaved("lockdTasks", []);
+    let schedules = getSaved("lockdSchedules", []);
+    let goals = getSaved("lockdGoals", []);
+    let focus = getSaved("lockdFocus", "");
+
+    function saveData() {
+      localStorage.setItem("lockdTasks", JSON.stringify(tasks));
+      localStorage.setItem("lockdSchedules", JSON.stringify(schedules));
+      localStorage.setItem("lockdGoals", JSON.stringify(goals));
+      localStorage.setItem("lockdFocus", JSON.stringify(focus));
+    }
+
+    function showDate() {
+      document.getElementById("todayDate").textContent =
+        new Date().toLocaleDateString("en-US", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric"
+        });
+    }
+
+    function saveFocus() {
+      focus = document.getElementById("focusInput").value.trim();
+
+      if (!focus) return;
+
+      saveData();
+      renderFocus();
+    }
+
+    function renderFocus() {
+      document.getElementById("savedFocus").textContent =
+        focus ? "Today's priority: " + focus : "";
+      document.getElementById("focusInput").value = focus;
+    }
+
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      const name = input.value.trim();
+      const priority = document.getElementById("taskPriority").value;
+
+      if (!name) return;
+
+      tasks.push({
+        id: Date.now() + Math.random(),
+        name,
+        priority,
+        done: false
+      });
+
+      input.value = "";
+      saveData();
+      renderTasks();
+    }
+
+    function toggleTask(id) {
+      tasks = tasks.map(task =>
+        task.id === id ? {...task, done: !task.done} : task
+      );
+
+      saveData();
+      renderTasks();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(task => task.id !== id);
+      saveData();
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+
+      tasks.forEach(task => {
+        const item = document.createElement("div");
+        item.className = "task";
+
+        const check = document.createElement("input");
+        check.type = "checkbox";
+        check.checked = task.done;
+        check.addEventListener("change", () => toggleTask(task.id));
+
+        const name = document.createElement("span");
+        name.className = "task-name" + (task.done ? " completed" : "");
+        name.textContent = task.name;
+
+        const priority = document.createElement("span");
+        priority.className = "priority";
+        priority.textContent = task.priority;
+
+        const remove = document.createElement("button");
+        remove.className = "delete";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", "Delete task");
+        remove.addEventListener("click", () => deleteTask(task.id));
+
+        item.append(check, name, priority, remove);
+        list.appendChild(item);
+      });
+
+      const total = tasks.length;
+      const completed = tasks.filter(task => task.done).length;
+      const percent = total ? Math.round(completed / total * 100) : 0;
+
+      document.getElementById("progressNumber").textContent = percent + "%";
+      document.getElementById("progressBar").style.width = percent + "%";
+      document.getElementById("progressText").textContent =
+        total ? completed + " of " + total + " tasks completed." :
+        "Let's get started!";
+    }
+
+    function addSchedule() {
+  const start = document.getElementById("scheduleStart").value;
+  const end = document.getElementById("scheduleEnd").value;
+  const name = document.getElementById("scheduleInput").value.trim();
+  const category = document.getElementById("scheduleCategory").value;
+
+  if (!start || !end || !name) {
+    alert("Please enter a start time, end time, and activity.");
+    return;
+  }
+
+  if (end <= start) {
+    alert("End time must be later than start time.");
+    return;
+  }
+
+  schedules.push({
+    id: Date.now() + Math.random(),
+    start,
+    end,
+    name,
+    category
+  });
+
+  schedules.sort((a, b) => {
+    return (a.start || a.time).localeCompare(b.start || b.time);
+  });
+
+  document.getElementById("scheduleStart").value = "";
+  document.getElementById("scheduleEnd").value = "";
+  document.getElementById("scheduleInput").value = "";
+
+  saveData();
+  renderSchedule();
+}
+
+function renderSchedule() {
+  const list = document.getElementById("scheduleList");
+  list.innerHTML = "";
+
+  schedules.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "schedule-item";
+
+    const label = document.createElement("span");
+
+    const start = item.start || item.time;
+    const end = item.end ? " – " + item.end : "";
+
+    label.textContent =
+      start + end + " | " + item.name +
+      (item.category ? " · " + item.category : "");
+
+    const remove = document.createElement("button");
+    remove.className = "delete";
+    remove.textContent = "×";
+    remove.setAttribute("aria-label", "Delete schedule item");
+
+    remove.addEventListener("click", () => {
+      schedules = schedules.filter(x => x.id !== item.id);
+      saveData();
+      renderSchedule();
+    });
+
+    row.append(label, remove);
+    list.appendChild(row);
+  });
+}
+
+    function addGoal() {
+      const input = document.getElementById("goalInput");
+      const name = input.value.trim();
+
+      if (!name) return;
+
+      goals.push({id: Date.now() + Math.random(), name});
+      input.value = "";
+      saveData();
+      renderGoals();
+    }
+
+    function renderGoals() {
+      const list = document.getElementById("goalList");
+      list.innerHTML = "";
+
+      goals.forEach(goal => {
+        const row = document.createElement("div");
+        row.className = "goal-item";
+
+        const label = document.createElement("span");
+        label.textContent = "✦ " + goal.name;
+
+        const remove = document.createElement("button");
+        remove.className = "delete";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", "Delete goal");
+        remove.addEventListener("click", () => {
+          goals = goals.filter(x => x.id !== goal.id);
+          saveData();
+          renderGoals();
+        });
+
+        row.append(label, remove);
+        list.appendChild(row);
+      });
+    }
+    // HABITS TRACKER
+
+let habits = JSON.parse(localStorage.getItem("lockdHabits") || "[]");
+
+function getTodayKey() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function saveHabits() {
+  localStorage.setItem("lockdHabits", JSON.stringify(habits));
+}
+
+function addHabit() {
+  const input = document.getElementById("habitInput");
+  const time = document.getElementById("habitTime");
+  const name = input.value.trim();
+
+  if (!name) {
+    alert("Please enter a habit first!");
+    return;
+  }
+
+  habits.push({
+    id: Date.now() + Math.random(),
+    name: name,
+    time: time.value,
+    completedDates: []
+  });
+
+  input.value = "";
+  saveHabits();
+  renderHabits();
+}
+
+function toggleHabit(id) {
+  const today = getTodayKey();
+  const habit = habits.find(item => item.id === id);
+
+  if (!habit) return;
+
+  if (habit.completedDates.includes(today)) {
+    habit.completedDates = habit.completedDates.filter(date => date !== today);
+  } else {
+    habit.completedDates.push(today);
+  }
+
+  saveHabits();
+  renderHabits();
+}
+
+function deleteHabit(id) {
+  habits = habits.filter(habit => habit.id !== id);
+  saveHabits();
+  renderHabits();
+}
+
+function renderHabits() {
+  const list = document.getElementById("habitList");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  const today = getTodayKey();
+  const times = ["Morning", "Afternoon", "Evening"];
+
+  if (habits.length === 0) {
+    list.textContent = "Your habits will appear here. Add your first one!";
+  }
+
+  times.forEach(time => {
+    const group = habits.filter(habit => habit.time === time);
+    if (group.length === 0) return;
+
+    const heading = document.createElement("h3");
+    heading.textContent = time;
+    list.appendChild(heading);
+
+    group.forEach(habit => {
+      const row = document.createElement("div");
+      row.className = "habit-row";
+
+      const label = document.createElement("label");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = habit.completedDates.includes(today);
+      checkbox.addEventListener("change", () => toggleHabit(habit.id));
+
+      const name = document.createElement("span");
+      name.textContent = habit.name;
+
+      label.appendChild(checkbox);
+      label.appendChild(name);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", () => deleteHabit(habit.id));
+
+      row.appendChild(label);
+      row.appendChild(deleteButton);
+      list.appendChild(row);
+    });
+  });
+
+  updateHabitProgress();
+}
+
+function updateHabitProgress() {
+  const today = getTodayKey();
+  const completed = habits.filter(habit =>
+    habit.completedDates.includes(today)
+  ).length;
+
+  const percentage = habits.length
+    ? Math.round((completed / habits.length) * 100)
+    : 0;
+
+  document.getElementById("habitProgress").textContent = percentage + "%";
+  document.getElementById("habitProgressBar").style.width = percentage + "%";
+
+  document.getElementById("habitProgressText").textContent =
+    habits.length === 0
+      ? "Let's build some consistency!"
+      : `${completed} of ${habits.length} habits completed today.`;
+
+  const completedDays = new Set(
+    habits.flatMap(habit => habit.completedDates)
+  );
+
+  let streak = 0;
+  const checkDate = new Date();
+
+  if (!completedDays.has(getTodayKey())) {
+    checkDate.setDate(checkDate.getDate() - 1);
+  }
+
+  while (completedDays.has(
+    `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, "0")}-${String(checkDate.getDate()).padStart(2, "0")}`
+  )) {
+    streak++;
+    checkDate.setDate(checkDate.getDate() - 1);
+  }
+
+  document.getElementById("habitStreak").textContent =
+    streak + (streak === 1 ? " day" : " days");
+}
+// MONTHLY CALENDAR
+
+let calendarEvents = JSON.parse(
+  localStorage.getItem("lockdCalendarEvents") || "[]"
+);
+
+let calendarView = new Date();
+let selectedCalendarDate = new Date();
+
+function dateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function saveCalendarData() {
+  localStorage.setItem(
+    "lockdCalendarEvents",
+    JSON.stringify(calendarEvents)
+  );
+}
+
+function changeMonth(amount) {
+  calendarView = new Date(
+    calendarView.getFullYear(),
+    calendarView.getMonth() + amount,
+    1
+  );
+
+  selectedCalendarDate = new Date(
+    calendarView.getFullYear(),
+    calendarView.getMonth(),
+    1
+  );
+
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const grid = document.getElementById("calendarGrid");
+  const monthLabel = document.getElementById("calendarMonth");
+
+  const year = calendarView.getFullYear();
+  const month = calendarView.getMonth();
+
+  monthLabel.textContent = calendarView.toLocaleDateString(
+    "en-US",
+    { month: "long", year: "numeric" }
+  );
+
+  grid.innerHTML = "";
+
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  weekdays.forEach(day => {
+    const label = document.createElement("div");
+    label.className = "calendar-weekday";
+    label.textContent = day;
+    grid.appendChild(label);
+  });
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const blank = document.createElement("div");
+    blank.className = "calendar-day empty";
+    grid.appendChild(blank);
+  }
+
+  const today = dateKey(new Date());
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const key = dateKey(date);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "calendar-day";
+    button.textContent = day;
+
+    if (key === dateKey(selectedCalendarDate)) {
+      button.classList.add("selected");
+    }
+
+    if (key === today) {
+      button.classList.add("today");
+    }
+
+    if (calendarEvents.some(event => event.date === key)) {
+      const dot = document.createElement("span");
+      dot.className = "event-dot";
+      button.appendChild(dot);
+    }
+
+    button.addEventListener("click", () => {
+      selectedCalendarDate = date;
+      renderCalendar();
+    });
+
+    grid.appendChild(button);
+  }
+
+  document.getElementById("selectedDate").textContent =
+    selectedCalendarDate.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric"
+    });
+
+  renderCalendarEvents();
+}
+
+function addCalendarEvent() {
+  const titleInput = document.getElementById("eventTitle");
+  const descriptionInput = document.getElementById("eventDescription");
+
+  const title = titleInput.value.trim();
+  const description = descriptionInput.value.trim();
+
+  if (!title) {
+    alert("Please enter an event title.");
+    return;
+  }
+
+  calendarEvents.push({
+    id: Date.now() + Math.random(),
+    date: dateKey(selectedCalendarDate),
+    title: title,
+    description: description
+  });
+
+  saveCalendarData();
+
+  titleInput.value = "";
+  descriptionInput.value = "";
+
+  renderCalendar();
+}
+
+function renderCalendarEvents() {
+  const container = document.getElementById("calendarEvents");
+  const selectedKey = dateKey(selectedCalendarDate);
+
+  container.innerHTML = "";
+
+  const events = calendarEvents.filter(
+    event => event.date === selectedKey
+  );
+
+  if (events.length === 0) {
+    container.textContent = "No events planned for this date yet.";
+    return;
+  }
+
+  events.forEach(event => {
+    const card = document.createElement("div");
+    card.className = "calendar-event";
+
+    const details = document.createElement("div");
+
+    const title = document.createElement("strong");
+    title.textContent = event.title;
+    details.appendChild(title);
+
+    if (event.description) {
+      const description = document.createElement("small");
+      description.textContent = event.description;
+      details.appendChild(description);
+    }
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.textContent = "×";
+    removeButton.setAttribute("aria-label", "Delete event");
+
+    removeButton.addEventListener("click", () => {
+      calendarEvents = calendarEvents.filter(
+        item => item.id !== event.id
+      );
+
+      saveCalendarData();
+      renderCalendar();
+    });
+
+    card.appendChild(details);
+    card.appendChild(removeButton);
+    container.appendChild(card);
+  });
+}
+function showPage(pageName) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("active", page.id === pageName);
+  });
+
+  document.querySelectorAll(".nav-button").forEach(button => {
+    button.classList.toggle("active", button.id === "nav-" + pageName);
+  });
+}
+showPage("home");
+    showDate();
+    renderCalendar();
+    renderFocus();
+    renderTasks();
+    renderSchedule();
+    renderGoals();
+  </script>
+<script>
+window.addEventListener("load", function() {
+    setTimeout(function() {
+        document.getElementById("loading-screen").classList.add("fade-out");
+    }, 2500);
+});
+</script>
+</body>
+</html>
